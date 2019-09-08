@@ -1,5 +1,6 @@
 package maz.springframework.bootstrap;
 
+import lombok.extern.slf4j.Slf4j;
 import maz.springframework.domain.Difficulty;
 import maz.springframework.domain.Ingredient;
 import maz.springframework.domain.Recipe;
@@ -8,11 +9,13 @@ import maz.springframework.repositories.RecipeRepository;
 import maz.springframework.repositories.UnitOfMeasureRepository;
 import org.springframework.boot.CommandLineRunner;
 import org.springframework.stereotype.Component;
+import org.springframework.transaction.annotation.Transactional;
 
 import java.math.BigDecimal;
 import java.util.HashSet;
 import java.util.Set;
 
+@Slf4j
 @Component
 public class DataLoader implements CommandLineRunner {
 
@@ -27,7 +30,9 @@ public class DataLoader implements CommandLineRunner {
     }
 
     @Override
+    @Transactional
     public void run(String... args) throws Exception {
+        log.debug("######### DATA LOADER (BOOTSTRAP) #########");
         Ingredient ingredient1 = new Ingredient();
         Ingredient ingredient2 = new Ingredient();
         Ingredient ingredient3 = new Ingredient();
