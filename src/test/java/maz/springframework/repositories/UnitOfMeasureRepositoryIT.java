@@ -25,8 +25,8 @@ public class UnitOfMeasureRepositoryIT {
 
     @Test
     public void findByDescription() {
-        Optional<UnitOfMeasure> unit = unitOfMeasureRepository.findByDescription("Cup");
+        Optional<UnitOfMeasure> unit = unitOfMeasureRepository.findByDescription("Teaspoon");
 
-        assertEquals("Cup", unit.get().getDescription());
+        assertEquals("Teaspoon", unit.get().getDescription());
     }
 }
