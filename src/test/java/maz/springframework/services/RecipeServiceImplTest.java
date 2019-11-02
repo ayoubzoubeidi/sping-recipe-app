@@ -9,13 +9,16 @@ import org.mockito.Mockito;
 import org.mockito.MockitoAnnotations;
 
 import java.util.HashSet;
+import java.util.Optional;
 import java.util.Set;
 
 import static org.junit.Assert.*;
+import static org.mockito.ArgumentMatchers.anyLong;
+import static org.mockito.Mockito.*;
 
 public class RecipeServiceImplTest {
 
-    RecipeServiceImpl recipeService;
+    RecipeService recipeService;
 
     @Mock
     RecipeRepository recipeRepository;
@@ -34,7 +37,7 @@ public class RecipeServiceImplTest {
         Set<Recipe> recipesData = new HashSet<>();
         recipesData.add(recipe);
 
-        Mockito.when(recipeService.getRecipes()).thenReturn(recipesData);
+        when(recipeService.getRecipes()).thenReturn(recipesData);
 
 
         Set<Recipe> recipes = new HashSet<>();
@@ -45,6 +48,25 @@ public class RecipeServiceImplTest {
         Mockito.verify(recipeRepository,Mockito.times(1)).findAll();
 
         assertEquals(1, recipes.size());
+
+    }
+
+    @Test
+    public void getRecipeById() {
+        Recipe recipe = new Recipe();
+        recipe.setId(1L);
+        Optional<Recipe> optionalRecipe = Optional.of(recipe);
+
+        when(recipeRepository.findById(anyLong())).thenReturn(optionalRecipe);
+
+        Recipe returnedRecipe = recipeService.findById(1L);
+
+        assertNotNull("Null recipe", returnedRecipe);
+
+        verify(recipeRepository, times(1)).findById(anyLong());
+
+        verify(recipeRepository, never()).findAll();
+
 
     }
 }
