@@ -1,5 +1,6 @@
 package maz.recipe.services;
 
+import maz.recipe.converters.*;
 import maz.recipe.domain.Recipe;
 import maz.recipe.repositories.RecipeRepository;
 import org.junit.Before;
@@ -27,7 +28,16 @@ public class RecipeServiceImplTest {
     public void setUp() throws Exception {
         MockitoAnnotations.initMocks(this);
 
-        recipeService = new RecipeServiceImpl(recipeRepository);
+        recipeService = new RecipeServiceImpl(
+                recipeRepository,
+                new RecipeToRecipeCommand(
+                        new CategoryToCategoryCommand(),
+                        new IngredientToIngredientCommand(new UnitOfMeasureToUnitOfMeasureCommand()),
+                        new NotesToNotesCommand()),
+                new RecipeCommandToRecipe(
+                        new CategoryCommandToCategory(),
+                        new IngredientCommandToIngredient(new UnitOfMeasureCommandToUnitOfMeasure()),
+                        new NotesCommandToNotes()));
     }
 
     @Test
@@ -45,7 +55,7 @@ public class RecipeServiceImplTest {
 
         recipes = recipeService.getRecipes();
 
-        Mockito.verify(recipeRepository,Mockito.times(1)).findAll();
+        Mockito.verify(recipeRepository, Mockito.times(1)).findAll();
 
         assertEquals(1, recipes.size());
 
